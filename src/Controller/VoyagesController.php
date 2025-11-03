@@ -13,7 +13,22 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author user
  */
 class VoyagesController extends AbstractController {
-    //put your code here
+/**
+ * 
+ * @var VisiteRepository
+ */
+private $repository;
+
+
+/**
+ * 
+ * @param VisiteRepository $repository
+ */
+public function __construct(VisiteRepository $repository){
+    $this->repository = $repository;
+    }
+    
+    
     #[Route('/voyages', name: 'voyages')]
     public function index(): Response{
         $visites = $this->repository->findALLOrderBy('datecreation', 'DESC');
@@ -48,25 +63,4 @@ class VoyagesController extends AbstractController {
             'visite' => $visite
         ]);
     }
-
-
-
-/**
- * 
- * @var VisiteRepository
- */
-private $repository;
-
-
-/**
- * 
- * @param VisiteRepository $repository
- */
-public function __construct(VisiteRepository $repository){
-    $this->repository = $repository;
-    }
-    
-
-
-
 }
