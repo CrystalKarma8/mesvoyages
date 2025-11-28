@@ -2,15 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\Visite;
 use App\Entity\Environnement;
+use App\Entity\Visite;
 use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\File;
 
 class VisiteType extends AbstractType
 {
@@ -38,6 +42,18 @@ class VisiteType extends AbstractType
                 'choice_label' => 'nom',
                 'multiple' => true,
                 'required' => false
+            ])
+            ->add('imageFile', FileType::class, [
+                'required' => false,
+                'label' => 'sélection image',
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => ['image/jpeg','image/png'],
+                        'mimeTypesMessage' => 'Ce fichier n\'est pas une image (.png/.jpeg)',
+                        'maxSize'        => '500k',
+                        'maxSizeMessage' => 'Cette image est trop lourde (500Ko max)',
+                    ]),
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer'
