@@ -1,6 +1,58 @@
 {% extends "basefront.html.twig" %}
 
 {% block body %}
-    <h1>Page d'accueil</h1>
-    <a href="{{ path('voyages') }}">voyages</a>
+   <h2>Bienvenue sur mon site personnel de présentation de mes voyages.</h2>
+
+    <div class="description">
+        <p>
+            Dans la partie <a href="{{ path('voyages') }}">Voyages</a>, vous pouvez voir la liste des visites que j'ai faites dans différentes villes.<br>
+            À chaque fois, j'ai précisé la ville, le pays, la note et la date. Vous pouvez trier et filtrer ces résultats.
+        </p>
+        <p>
+            En cliquant sur une ville, vous aurez plus d'informations : températures, descriptions, environnements et photos.<br>
+            N'hésitez pas à me contacter via le <a href="{{ path('contact') }}">formulaire de contact</a>.
+        </p>
+    </div>
+
+    <h3>Voici mes 2 derniers voyages :</h3>
+    <div class="row">
+        {% for visite in voyages %}
+            <div class="col-6">
+                <div class="row no-gutters mb-4">
+                    {# Partie Image (Gauche) #}
+                    <div class="col-md-5">
+                        {% if visite.imagename %}
+                            <img src="{{ asset('images/visites/' ~ visite.imagename) }}" 
+                                class="img-fluid rounded" 
+                                style="width: 200px;" 
+                                alt="{{ visite.ville }}">
+                        {% else %}
+                            <img src="{{ asset('images/default.jpg') }}" class="img-fluid rounded" alt="Pas d'image">
+                        {% endif %}
+                    </div>
+
+                    {# Partie Infos (Droite) #}
+                    <div class="col-md-7 ps-3">
+                        <small class="text-muted">{{ visite.datecreation|date('d/m/Y') }}</small>
+                        <h4 class="mt-1">
+                            <a href="#">{{ visite.ville }}</a>
+                        </h4>
+                        <p class="mb-1 text-uppercase">{{ visite.pays }}</p>
+                        
+                        <p class="fw-bold text-success mb-1">{{ visite.note }}/20</p>
+                        <p class="small mb-1">t° entre {{ visite.tempmin }}° et {{ visite.tempmax }}°</p>
+                        
+                        <div class="mt-2">
+                            <strong>Environnements :</strong><br>
+                            {% for env in visite.environnements %}
+                                <span class="badge bg-light text-dark">{{ env.nom }}</span> 
+                            {% else %}
+                                <span class="text-muted small">Aucun environnement spécifié</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
